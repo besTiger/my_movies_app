@@ -1,17 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../../model/movie.dart';
+import '../../../models/movie.dart';
 import '../../../services/movie_api.dart';
+import '../../description_screen/description_screen.dart';
 import '../widgets/movie_item_widget.dart';
 
 class PopularTab extends StatefulWidget {
   const PopularTab({Key? key}) : super(key: key);
 
+
   @override
-  PopularTabState createState() => PopularTabState();
+  _PopularTabState createState() => _PopularTabState();
 }
 
-class PopularTabState extends State<PopularTab> {
+class _PopularTabState extends State<PopularTab> {
   List<Movie> movies = [];
 
   @override
@@ -48,7 +50,21 @@ class PopularTabState extends State<PopularTab> {
           ),
           itemBuilder: (context, index) {
             final movie = movies[index];
-            return MovieItem(movie: movie);
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        DescriptionScreen(
+                          description: movie.description,
+                          movieId: movie.movieId,
+                        ),
+                  ),
+                );
+              },
+              child: MovieItem(movie: movie),
+            );
           },
         ),
       ),
