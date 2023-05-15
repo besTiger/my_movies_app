@@ -2,32 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/popular_tab.dart';
 import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/top_rated_tab.dart';
 import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/upcoming_tab.dart';
+import 'package:provider/provider.dart';
+import '../../theme/theme_model.dart';
 
 class MoviesScreen extends StatelessWidget {
   const MoviesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: DefaultTabController(
+    return Consumer(builder: (context, ThemeModel themeNotifier, child) {
+      return SafeArea(
+          child: DefaultTabController(
         length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              'Movies',
-              style: TextStyle(
+            child: Scaffold(
+             appBar: AppBar(
+              title: const Text(
+               'Movies',
+               style: TextStyle(
                 fontSize: 26.0,
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-              ),
-            ),
-            centerTitle: true,
-            backgroundColor: Colors.orange,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
+               ),
+             ),
+              centerTitle: true,
+              backgroundColor: Colors.orange,
+              actions: [
+              IconButton(
+                  onPressed: () {
+                    themeNotifier.isDark
+                        ? themeNotifier.isDark = false
+                        : themeNotifier.isDark = true;
+                  },
+                  icon: Icon(
+                    themeNotifier.isDark
+                        ? Icons.nightlight_round
+                        : Icons.wb_sunny,
+                    color: Colors.black,
+                  ))
+             ],
+             ),
+             body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+               children: [
                 Container(
                   height: 45,
                   decoration: BoxDecoration(
@@ -67,7 +84,7 @@ class MoviesScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      ));
+    });
   }
 }
