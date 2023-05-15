@@ -2,9 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../model/movie.dart';
 import '../../../services/movie_api.dart';
+import '../widgets/movie_item_widget.dart';
 
 class PopularTab extends StatefulWidget {
-  const PopularTab({super.key});
+  const PopularTab({Key? key}) : super(key: key);
 
   @override
   PopularTabState createState() => PopularTabState();
@@ -47,44 +48,7 @@ class PopularTabState extends State<PopularTab> {
           ),
           itemBuilder: (context, index) {
             final movie = movies[index];
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.orange[300],
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4.0),
-                    child: Image.network(
-                      movie.imageUrl,
-                      width: 150.0,
-                      height: 210.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-
-                  const SizedBox(height: 4.0),
-                  Text(
-                    movie.year,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4.0),
-                  Text(
-                    'Rating: ${movie.rating}',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                ],
-              ),
-            );
+            return MovieItem(movie: movie);
           },
         ),
       ),
