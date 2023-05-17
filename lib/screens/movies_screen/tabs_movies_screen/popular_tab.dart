@@ -17,22 +17,21 @@ class _PopularTabState extends State<PopularTab> {
   int currentPage = 1;
   bool isLoading = false;
   final ScrollController _scrollController = ScrollController();
-  bool _showBackToTopButton = false; // Track whether to show the "Back to Top" button or not
+  bool _showBackToTopButton = false;
 
   @override
   void initState() {
     super.initState();
     _fetchMovies();
-
     _scrollController.addListener(() {
-      if (!isLoading && _scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (!isLoading &&
+          _scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent) {
         _fetchMovies();
       }
 
       setState(() {
-        _showBackToTopButton = _scrollController.position.pixels >
-            100; // Show the button when scrolled down 100 pixels
+        _showBackToTopButton = _scrollController.position.pixels > 100;
       });
     });
   }
@@ -51,6 +50,8 @@ class _PopularTabState extends State<PopularTab> {
     });
 
     try {
+      await Future.delayed(const Duration(seconds: 1));
+
       final newMovies = await MovieApi.fetchMovies(page: currentPage);
       setState(() {
         movies.addAll(newMovies);
@@ -65,6 +66,15 @@ class _PopularTabState extends State<PopularTab> {
         isLoading = false;
       });
     }
+  }
+
+  Future<void> _refreshMovies() async {
+    await Future.delayed(const Duration(milliseconds: 1500));
+    setState(() {
+      movies.clear();
+      currentPage = 1;
+    });
+    await _fetchMovies();
   }
 
   Widget _buildMovieItem(BuildContext context, int index) {
@@ -83,57 +93,38 @@ class _PopularTabState extends State<PopularTab> {
     );
   }
 
-  Widget _buildLoadingIndicator() {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (scrollNotification) {
-            if (!isLoading &&
-                scrollNotification.metrics.pixels ==
-                    scrollNotification.metrics.maxScrollExtent) {
-              _fetchMovies();
-              return true;
-            }
-
-            setState(() {
-              _showBackToTopButton =
-                  _scrollController.position.pixels > 100; // Show the button when scrolled down 100 pixels
-            });
-
-            return false;
-          },
+        child: RefreshIndicator(
+          color: Colors.orange, // Set the color of the swipe-to-refresh indicator
+          onRefresh: _refreshMovies,
           child: Stack(
             children: [
               GridView.builder(
                 padding: const EdgeInsets.all(4.0),
                 controller: _scrollController,
-                itemCount: movies.length + (isLoading ? 1 : 0),
-                gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
+                itemCount: movies.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.7,
                   mainAxisSpacing: 5.0,
                   crossAxisSpacing: 5.0,
                 ),
                 itemBuilder: (context, index) {
-                  if (index < movies.length) {
-                    return _buildMovieItem(context, index);
-                  } else {
-                    return _buildLoadingIndicator();
-                  }
+                  return _buildMovieItem(context, index);
                 },
               ),
+             // if (isLoading && movies.isEmpty) // Show progress bar only when loading the first page
+               // Center(
+                 // child: CircularProgressIndicator(
+                   // valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                  //),
+               // ),
               Positioned(
                 bottom: 16.0,
-                 right: 16.0,
+                right: 16.0,
                 child: AnimatedOpacity(
                   opacity: _showBackToTopButton ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 500),
@@ -164,5 +155,5 @@ class _PopularTabState extends State<PopularTab> {
       ),
     );
   }
-
 }
+
