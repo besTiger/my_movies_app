@@ -10,7 +10,6 @@ import '../../theme/theme_model.dart';
 class MoviesScreen extends StatelessWidget {
   const MoviesScreen({Key? key}) : super(key: key);
 
-  @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ThemeModel themeNotifier, child) {
       return SafeArea(
@@ -19,10 +18,13 @@ class MoviesScreen extends StatelessWidget {
           child: Scaffold(
             appBar: CustomAppBar(themeNotifier: themeNotifier),
             body: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               child: Column(
                 children: const [
-                  TabBarContainer(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4.0),
+                    child: TabBarContainer(),
+                  ),
                   Expanded(
                     child: TabBarView(
                       children: [
