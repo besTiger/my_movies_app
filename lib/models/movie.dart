@@ -12,4 +12,13 @@ class Movie {
     required this.imageUrl,
     required this.movieId,
   });
+  factory Movie.fromJson(Map<String, dynamic> json) {
+    return Movie(
+      title: json['title'] ?? '',
+      year: json['year'] ?? '',
+      rating: json['rating']?.toDouble() ?? 0.0,
+      imageUrl: json['imageUrl'] ?? '',
+      movieId: json['movieId'] ?? 0,
+    );
+  }
 }

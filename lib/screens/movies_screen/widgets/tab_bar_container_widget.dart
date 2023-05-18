@@ -10,6 +10,10 @@ class TabBarContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.orange[300],
         borderRadius: BorderRadius.circular(25.0),
+        border: Border.all(
+          color: Colors.black,
+          width: 1.0,
+        ),
       ),
       child: TabBar(
         indicator: BoxDecoration(

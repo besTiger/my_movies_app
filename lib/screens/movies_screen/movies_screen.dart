@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/popular_tab.dart';
+import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/popular_tab/popular_tab.dart';
 import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/top_rated_tab.dart';
 import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/upcoming_tab.dart';
 import 'package:my_movies_app/screens/movies_screen/widgets/%D1%81ustom_app_bar_widget.dart';

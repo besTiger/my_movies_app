@@ -10,4 +10,13 @@ class DetailsMovie {
     required this.overview,
     required this.posterUrl,
   });
+
+  factory DetailsMovie.fromJson(Map<String, dynamic> json) {
+    return DetailsMovie(
+      title: json['title'] ?? '',
+      releaseDate: json['release_date'] ?? '',
+      overview: json['overview'] ?? '',
+      posterUrl: json['poster_url'] ?? '',
+    );
+  }
 }

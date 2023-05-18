@@ -1,23 +1,27 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../../models/movie.dart';
-import '../../../services/movie_api.dart';
-import '../../details_movie_screen/details_movie_screen.dart';
-import '../widgets/movie_item_widget.dart';
+import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/popular_tab/widgets/backToTop_widget.dart';
+import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/popular_tab/widgets/movie_gridview_widget.dart';
+import '../../../../models/movie.dart';
+import '../../../../services/movie_api.dart';
+import '../../../details_movie_screen/details_movie_screen.dart';
+import '../../widgets/movie_item_widget.dart';
+
 
 class PopularTab extends StatefulWidget {
   const PopularTab({Key? key}) : super(key: key);
 
   @override
-  _PopularTabState createState() => _PopularTabState();
+  PopularTabState createState() => PopularTabState();
 }
 
-class _PopularTabState extends State<PopularTab> {
+class PopularTabState extends State<PopularTab> with SingleTickerProviderStateMixin {
   List<Movie> movies = [];
   int currentPage = 1;
   bool isLoading = false;
   final ScrollController _scrollController = ScrollController();
   bool _showBackToTopButton = false;
+  late AnimationController _animationController;
 
   @override
   void initState() {
@@ -34,11 +38,17 @@ class _PopularTabState extends State<PopularTab> {
         _showBackToTopButton = _scrollController.position.pixels > 100;
       });
     });
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat();
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -69,7 +79,7 @@ class _PopularTabState extends State<PopularTab> {
   }
 
   Future<void> _refreshMovies() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
+    await Future.delayed(const Duration(milliseconds: 1000));
     setState(() {
       movies.clear();
       currentPage = 1;
@@ -93,62 +103,47 @@ class _PopularTabState extends State<PopularTab> {
     );
   }
 
+  Widget _buildLoadingSpinner() {
+    return isLoading && movies.isNotEmpty
+        ? const Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: CircularProgressIndicator(
+          color: Colors.black,
+        ),
+      ),
+    )
+        : const SizedBox.shrink();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicator(
-          color: Colors.orange, // Set the color of the swipe-to-refresh indicator
+          color: Colors.orange,
           onRefresh: _refreshMovies,
           child: Stack(
             children: [
-              GridView.builder(
-                padding: const EdgeInsets.all(4.0),
-                controller: _scrollController,
-                itemCount: movies.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.7,
-                  mainAxisSpacing: 5.0,
-                  crossAxisSpacing: 5.0,
-                ),
-                itemBuilder: (context, index) {
-                  return _buildMovieItem(context, index);
-                },
+              MovieGridView(
+                scrollController: _scrollController,
+                movies: movies,
+                buildMovieItem: _buildMovieItem,
               ),
-             // if (isLoading && movies.isEmpty) // Show progress bar only when loading the first page
-               // Center(
-                 // child: CircularProgressIndicator(
-                   // valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-                  //),
-               // ),
               Positioned(
                 bottom: 16.0,
                 right: 16.0,
                 child: AnimatedOpacity(
                   opacity: _showBackToTopButton ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 500),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      _scrollController.animateTo(
-                        0.0,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      side: const BorderSide(
-                        color: Colors.black,
-                        width: 2.0,
-                      ),
-                    ),
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.black,
-                    child: const Icon(Icons.arrow_upward),
+                  child: BackToTopButton(
+                    scrollController: _scrollController,
                   ),
                 ),
               ),
+              _buildLoadingSpinner(),
             ],
           ),
         ),
@@ -156,4 +151,3 @@ class _PopularTabState extends State<PopularTab> {
     );
   }
 }
-
