@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/popular_tab/widgets/backToTop_widget.dart';
 import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/popular_tab/widgets/movie_gridview_widget.dart';
-import '../../../../models/movie.dart';
+import '../../../../models/movies.dart';
 import '../../../../services/movie_api.dart';
 import '../../../details_movie_screen/details_movie_screen.dart';
-import '../../widgets/movie_item_widget.dart';
+import 'widgets/movie_item_widget.dart';
 
 
 class PopularTab extends StatefulWidget {
@@ -15,7 +15,7 @@ class PopularTab extends StatefulWidget {
   PopularTabState createState() => PopularTabState();
 }
 
-class PopularTabState extends State<PopularTab> with SingleTickerProviderStateMixin {
+class PopularTabState extends State<PopularTab>  {
   List<Movie> movies = [];
   int currentPage = 1;
   bool isLoading = false;
@@ -39,10 +39,6 @@ class PopularTabState extends State<PopularTab> with SingleTickerProviderStateMi
       });
     });
 
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )..repeat();
   }
 
   @override
@@ -64,7 +60,7 @@ class PopularTabState extends State<PopularTab> with SingleTickerProviderStateMi
 
       final newMovies = await MovieApi.fetchMovies(page: currentPage);
       setState(() {
-        movies.addAll(newMovies);
+        movies.addAll(newMovies.cast<Movie>());
         currentPage++;
       });
     } catch (e) {
@@ -95,7 +91,7 @@ class PopularTabState extends State<PopularTab> with SingleTickerProviderStateMi
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailsMovieScreen(movie.movieId),
+            builder: (context) => MovieDetailScreen(),
           ),
         );
       },
@@ -103,13 +99,14 @@ class PopularTabState extends State<PopularTab> with SingleTickerProviderStateMi
     );
   }
 
+
   Widget _buildLoadingSpinner() {
     return isLoading && movies.isNotEmpty
         ? const Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: CircularProgressIndicator(
+         alignment: Alignment.bottomCenter,
+          child: Padding(
+           padding: EdgeInsets.all(16.0),
+            child: CircularProgressIndicator(
           color: Colors.black,
         ),
       ),
@@ -123,7 +120,7 @@ class PopularTabState extends State<PopularTab> with SingleTickerProviderStateMi
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicator(
-          color: Colors.orange,
+          color: Colors.black,
           onRefresh: _refreshMovies,
           child: Stack(
             children: [

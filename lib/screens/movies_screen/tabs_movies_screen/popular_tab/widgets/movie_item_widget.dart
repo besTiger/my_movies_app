@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_movies_app/screens/movies_screen/widgets/rounded_image_widget.dart';
-import '../../../models/movie.dart';
+import 'package:my_movies_app/screens/movies_screen/tabs_movies_screen/popular_tab/widgets/rounded_image_widget.dart';
+import '../../../../../models/movies.dart';
 
 class MovieItem extends StatelessWidget {
   final Movie movie;
@@ -21,10 +21,10 @@ class MovieItem extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              RoundedImage(imageUrl: movie.imageUrl),
+              RoundedImage(imageUrl: movie.imageUrl ?? ''),
               const SizedBox(height: 4.0),
               Text(
-                movie.year,
+                movie.year?.toString() ?? '',
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16.0,
@@ -33,7 +33,7 @@ class MovieItem extends StatelessWidget {
               ),
               const SizedBox(height: 4.0),
               Text(
-                'Rating: ${movie.rating}',
+                'Rating: ${movie.rating?.toStringAsFixed(1) ?? ''}',
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 14.0,

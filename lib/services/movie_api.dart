@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/movie.dart';
+import '../models/movies.dart';
+
 
 class MovieApi {
   static const apiKey = 'e8bf0a88d8c448b3069dca27bd1d7619'; // Replace with your TMDB API key
@@ -20,7 +21,7 @@ class MovieApi {
           title: movieData['title'] ?? 'Unknown',
           year: movieData['release_date'] ?? 'Unknown',
           rating: movieData['vote_average']?.toDouble() ?? 0.0,
-          imageUrl: 'https://image.tmdb.org/t/p/w500${movieData['poster_path']}' ?? '',
+          imageUrl: 'https://image.tmdb.org/t/p/w500${movieData['poster_path']}',
           movieId: movieId,
         );
         movies.add(movie);
