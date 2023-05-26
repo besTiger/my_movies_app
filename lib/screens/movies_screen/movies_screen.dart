@@ -17,10 +17,10 @@ class MoviesScreen extends StatelessWidget {
           length: 3,
           child: Scaffold(
             appBar: CustomAppBar(themeNotifier: themeNotifier),
-            body: Padding(
-              padding: const EdgeInsets.all(2.0),
+            body: const Padding(
+              padding: EdgeInsets.all(2.0),
               child: Column(
-                children: const [
+                children: [
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 4.0),
                     child: TabBarContainer(),

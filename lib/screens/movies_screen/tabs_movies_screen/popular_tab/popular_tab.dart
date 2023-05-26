@@ -15,7 +15,7 @@ class PopularTab extends StatefulWidget {
   PopularTabState createState() => PopularTabState();
 }
 
-class PopularTabState extends State<PopularTab>  {
+class PopularTabState extends State<PopularTab> {
   List<Movie> movies = [];
   int currentPage = 1;
   bool isLoading = false;
@@ -38,7 +38,6 @@ class PopularTabState extends State<PopularTab>  {
         _showBackToTopButton = _scrollController.position.pixels > 100;
       });
     });
-
   }
 
   @override
@@ -83,37 +82,46 @@ class PopularTabState extends State<PopularTab>  {
     await _fetchMovies();
   }
 
+  void _navigateToDetailsScreen(BuildContext context, Movie movie) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetailsMovieScreen(
+          movieTitle: movie.title,
+          movieImageUrl: movie.imageUrl,
+          movieOverview: movie.overview,
+          movieRating: movie.rating,
+          actors: movie.actors, // Add the actors argument here
+        ),
+      ),
+    );
+  }
+
+
   Widget _buildMovieItem(BuildContext context, int index) {
     final movie = movies[index];
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MovieDetailScreen(),
-          ),
-        );
+        _navigateToDetailsScreen(context, movie);
       },
       child: MovieItem(movie: movie),
     );
   }
 
-
   Widget _buildLoadingSpinner() {
     return isLoading && movies.isNotEmpty
         ? const Align(
-         alignment: Alignment.bottomCenter,
-          child: Padding(
-           padding: EdgeInsets.all(16.0),
-            child: CircularProgressIndicator(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: CircularProgressIndicator(
           color: Colors.black,
         ),
       ),
     )
         : const SizedBox.shrink();
   }
-
 
   @override
   Widget build(BuildContext context) {
