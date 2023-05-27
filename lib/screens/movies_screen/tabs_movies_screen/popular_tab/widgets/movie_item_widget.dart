@@ -11,36 +11,33 @@ class MovieItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(2.0),
+        borderRadius: BorderRadius.circular(8.0),
         border: Border.all(color: Colors.black, width: 1.0),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(4.0),
-        child: Container(
-          color: Colors.orange[200],
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              RoundedImage(imageUrl: movie.imageUrl ?? ''),
-              const SizedBox(height: 4.0),
-              Text(
-                movie.year?.toString() ?? '',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            RoundedImage(imageUrl: movie.imageUrl ?? ''),
+            const SizedBox(height: 4.0),
+            Text(
+              movie.year?.toString() ?? '',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 4.0),
-              Text(
-                'Rating: ${movie.rating?.toStringAsFixed(1) ?? ''}',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.0,
-                ),
+            ),
+            const SizedBox(height: 4.0),
+            Text(
+              'Rating: ${movie.rating?.toStringAsFixed(1) ?? ''}',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 14.0,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

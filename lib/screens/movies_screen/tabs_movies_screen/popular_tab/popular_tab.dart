@@ -91,7 +91,7 @@ class PopularTabState extends State<PopularTab> {
           movieImageUrl: movie.imageUrl,
           movieOverview: movie.overview,
           movieRating: movie.rating,
-          actors: movie.actors, // Add the actors argument here
+          actors: movie.actors,
         ),
       ),
     );
@@ -112,14 +112,14 @@ class PopularTabState extends State<PopularTab> {
   Widget _buildLoadingSpinner() {
     return isLoading && movies.isNotEmpty
         ? const Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: CircularProgressIndicator(
-          color: Colors.black,
-        ),
-      ),
-    )
+           alignment: Alignment.bottomCenter,
+            child: Padding(
+             padding: EdgeInsets.all(16.0),
+             child: CircularProgressIndicator(
+             color: Colors.black,
+             ),
+           ),
+         )
         : const SizedBox.shrink();
   }
 
