@@ -22,7 +22,7 @@ class MovieItem extends StatelessWidget {
             RoundedImage(imageUrl: movie.imageUrl ?? ''),
             const SizedBox(height: 4.0),
             Text(
-              movie.year?.toString() ?? '',
+              movie.year.toString() ?? '',
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,
@@ -31,7 +31,7 @@ class MovieItem extends StatelessWidget {
             ),
             const SizedBox(height: 4.0),
             Text(
-              'Rating: ${movie.rating?.toStringAsFixed(1) ?? ''}',
+              'Rating: ${movie.rating.toStringAsFixed(1) ?? ''}',
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14.0,

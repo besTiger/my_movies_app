@@ -9,7 +9,7 @@ class Movie {
   final String releaseDate;
   final String genre;
   final String overview;
-  final List<Actors> actors;
+  List<Actors> actors;
 
   Movie({
     required this.title,
@@ -24,16 +24,22 @@ class Movie {
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) {
+    final List<Actors> actorsList = [];
+    if (json['actors'] != null && json['actors'] is List) {
+      final List<dynamic> actorsData = json['actors'];
+      actorsList.addAll(actorsData.map((actorData) => Actors.fromJson(actorData)));
+    }
+
     return Movie(
       title: json['title'] ?? '',
-      year: json['year'] ?? '',
-      rating: json['rating']?.toDouble() ?? 0.0,
-      imageUrl: json['imageUrl'] ?? '',
-      movieId: json['movieId'] ?? 0,
-      releaseDate: json['releaseDate'] ?? '',
-      genre: json['genre'] ?? '',
+      year: json['release_date'] ?? '',
+      rating: json['vote_average']?.toDouble() ?? 0.0,
+      imageUrl: 'https://image.tmdb.org/t/p/w500${json['poster_path']}' ?? '',
+      movieId: json['id'] ?? 0,
+      releaseDate: json['release_date'] ?? '',
+      genre: '',
       overview: json['overview'] ?? '',
-      actors: (json['actors'] as List<dynamic>).map((actorJson) => Actors.fromJson(actorJson)).toList(),
+      actors: actorsList,
     );
   }
 }

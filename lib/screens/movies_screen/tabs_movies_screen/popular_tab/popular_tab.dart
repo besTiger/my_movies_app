@@ -15,13 +15,16 @@ class PopularTab extends StatefulWidget {
   PopularTabState createState() => PopularTabState();
 }
 
-class PopularTabState extends State<PopularTab> {
+class PopularTabState extends State<PopularTab>
+    with AutomaticKeepAliveClientMixin<PopularTab> {
   List<Movie> movies = [];
   int currentPage = 1;
   bool isLoading = false;
   final ScrollController _scrollController = ScrollController();
   bool _showBackToTopButton = false;
-  late AnimationController _animationController;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -43,7 +46,6 @@ class PopularTabState extends State<PopularTab> {
   @override
   void dispose() {
     _scrollController.dispose();
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -55,8 +57,6 @@ class PopularTabState extends State<PopularTab> {
     });
 
     try {
-      await Future.delayed(const Duration(seconds: 1));
-
       final newMovies = await MovieApi.fetchMovies(page: currentPage);
       setState(() {
         movies.addAll(newMovies.cast<Movie>());
@@ -97,7 +97,6 @@ class PopularTabState extends State<PopularTab> {
     );
   }
 
-
   Widget _buildMovieItem(BuildContext context, int index) {
     final movie = movies[index];
 
@@ -112,19 +111,21 @@ class PopularTabState extends State<PopularTab> {
   Widget _buildLoadingSpinner() {
     return isLoading && movies.isNotEmpty
         ? const Align(
-           alignment: Alignment.bottomCenter,
-            child: Padding(
-             padding: EdgeInsets.all(16.0),
-             child: CircularProgressIndicator(
-             color: Colors.black,
-             ),
-           ),
-         )
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: CircularProgressIndicator(
+          color: Colors.black,
+        ),
+      ),
+    )
         : const SizedBox.shrink();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Важливий виклик для позначення, що потрібно зберігати стан
+
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicator(

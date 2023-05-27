@@ -13,7 +13,8 @@ class Actors {
     return Actors(
       name: json['name'] ?? '',
       character: json['character'] ?? '',
-      profileUrl: json['profile_url'] ?? '',
+      profileUrl: 'https://image.tmdb.org/t/p/w500${json['profile_path']}' ?? '',
     );
   }
 }
+

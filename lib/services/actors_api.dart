@@ -15,11 +15,7 @@ class ActorsApi {
 
       return castData
           .map<Actors>((actorData) =>
-          Actors(
-            name: actorData['name'],
-            character: actorData['character'],
-            profileUrl: 'https://image.tmdb.org/t/p/w500${actorData['profile_path']}',
-          ))
+          Actors.fromJson(actorData))
           .toList();
     } else {
       throw Exception('Failed to fetch actors.');
