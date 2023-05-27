@@ -67,7 +67,7 @@ class DetailsMovieScreenState extends State<DetailsMovieScreen> {
               child: _isLoading
                   ? const Center(
                     child: CircularProgressIndicator(
-                     valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                     valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
                 ),
               )
                   : Stack(
