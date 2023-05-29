@@ -5,7 +5,7 @@ import 'actors_api.dart';
 
 
 class MovieSearchService {
-  static const apiKey = 'e8bf0a88d8c448b3069dca27bd1d7619'; // Замініть на свій ключ TMDB API
+  static const apiKey = 'e8bf0a88d8c448b3069dca27bd1d7619';
 
   static Future<List<Movie>> searchMovies(String query) async {
     final url = 'https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query';
@@ -20,20 +20,48 @@ class MovieSearchService {
         for (var movieData in results) {
           final movieId = movieData['id'];
 
-          // Fetch actors for the current movie
           final actors = await ActorsApi.fetchActors(movieId: movieId);
 
           final movie = Movie.fromJson(movieData);
-          movie.actors = actors; // Assign the fetched list of actors
+          movie.actors = actors;
           movies.add(movie);
         }
 
         return movies;
       } else {
-        return []; // Return an empty list if no valid results are found
+        return [];
       }
     } else {
       throw Exception('Failed to search movies.');
+    }
+  }
+
+  static Future<List<Movie>> searchMoviesByCategory(String category) async {
+    final url = 'https://api.themoviedb.org/3/discover/movie?api_key=$apiKey&with_genres=$category';
+
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      final results = jsonData['results'];
+
+      if (results != null && results is List<dynamic>) {
+        List<Movie> movies = [];
+        for (var movieData in results) {
+          final movieId = movieData['id'];
+
+          final actors = await ActorsApi.fetchActors(movieId: movieId);
+
+          final movie = Movie.fromJson(movieData);
+          movie.actors = actors;
+          movies.add(movie);
+        }
+
+        return movies;
+      } else {
+        return [];
+      }
+    } else {
+      throw Exception('Failed to search movies by category.');
     }
   }
 }

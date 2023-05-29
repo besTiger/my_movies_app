@@ -17,7 +17,7 @@ class BottomBarScreenState extends State<BottomBarScreen> {
 
   final List<Widget> widgetOptions = [
     const MoviesScreen(),
-    const SearchScreen(),
+     SearchScreen(),
     const FavoriteScreen()
   ];
 
